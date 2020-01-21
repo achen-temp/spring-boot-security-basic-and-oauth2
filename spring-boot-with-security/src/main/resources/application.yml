@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: composite
+
+# register your app in google at following address:
+# https://console.developers.google.com/apis/credentials
+# redirect Url must be set to: http://localhost:8080/login/google
+google:
+  client:
+    clientId: 548254384958-7vp748tbgpfke8rm5g2o3kkmfgeulf7v.apps.googleusercontent.com
+    clientSecret: aaQdYykXAfblCp8ofL0tuxjg
+    accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+    userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+    clientAuthenticationScheme: form
+    scope: https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/userinfo.profile
+  resource:
+    userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+
+# register your app in github at following address:
+# https://github.com/settings/developers
+github:
+  client:
+    clientId: bd1c0a783ccdd1c9b9e4
+    clientSecret: 1a9030fbca47a5b2c28e92f19050bb77824b5ad1
+    accessTokenUri: https://github.com/login/oauth/access_token
+    userAuthorizationUri: https://github.com/login/oauth/authorize
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://api.github.com/user
+
+
+
