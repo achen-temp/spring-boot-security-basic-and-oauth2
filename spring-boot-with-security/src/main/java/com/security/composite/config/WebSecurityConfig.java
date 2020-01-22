@@ -20,6 +20,8 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticat
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.web.filter.CompositeFilter;
@@ -48,6 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        http.csrf().disable();
+
         //Authorization
         http.authorizeRequests().antMatchers("/", "/signup", "/login", "/logout").permitAll();
         http.authorizeRequests().antMatchers("/userInfo").access("hasAnyRole('USER', 'ADMIN')");
@@ -70,6 +75,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //Oauth2
         http.authorizeRequests().and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
+
+        //Remember Me
+        http.authorizeRequests().and()
+                .rememberMe()
+                .rememberMeParameter("remember-me")  //cookie entry name
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(120000);
     }
 
     @Bean
@@ -152,6 +164,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(){
+        /*JdbcTokenRepositoryImpl tokenRepositoryImpl = new JdbcTokenRepositoryImpl();
+        return tokenRepositoryImpl;*/
+        InMemoryTokenRepositoryImpl inMemoryTokenRepository = new InMemoryTokenRepositoryImpl();
+        return inMemoryTokenRepository;
+    }
 
 
 }
